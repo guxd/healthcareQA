@@ -13,6 +13,7 @@ def dayGenerate(start,end):
         data.append(day.strftime("%Y-%m-%d"))
         day = day + datetime.timedelta(days=1);
     return data
+
 def clean(date):
     import os
     if os.path.exists(config.basepath+config.datapath+"/"+date+"/"):
@@ -30,29 +31,28 @@ def continueNum():
         return 0
     
 def phase1():
-    
-   # main
-   jobDays = dayGenerate(config.startDate,config.endDate)
-   startNum = continueNum()
+    # main
+    jobDays = dayGenerate(config.startDate,config.endDate)
+    startNum = continueNum()
 
-   for job_id in range(startNum,len(jobDays)):
+    for job_id in range(startNum,len(jobDays)):
     
-     job = jobDays[job_id]
-     print job
-     clean(job);
-     path  = config.basepath+config.datapath+job+"/"
+        job = jobDays[job_id]
+        print(job)
+        clean(job);
+        path  = config.basepath+config.datapath+job+"/"
     
-     t=crawler_title(path+config.title_file,config.urlStart+job+"/")
-     t.run()
-     #   c = crawler_content(path+config.title_file,path+config.content_file)
-     #  c.run()
-     if t.getIsOver():
-        f=open(t.outdir,'r')
-        t.realRecord= len(f.readlines())
-        f.close()
-        f= open(config.basepath+config.logFile,"a");
-        f.write(str(job_id)+"\t"+job+"\t"+str(t.MaxPageNum)+"\t"+str(t.recordNum)+"\t"+str(t.realRecord)+"\n")
-        f.close()
+        t=crawler_title(path+config.title_file,config.urlStart+job+"/")
+        t.run()
+        #  c = crawler_content(path+config.title_file,path+config.content_file)
+        #  c.run()
+        if t.getIsOver():
+            f=open(t.outdir,'r')
+            t.realRecord= len(f.readlines())
+            f.close()
+            f= open(config.basepath+config.logFile,"a");
+            f.write(str(job_id)+"\t"+job+"\t"+str(t.MaxPageNum)+"\t"+str(t.recordNum)+"\t"+str(t.realRecord)+"\n")
+            f.close()
 def phase2():
     import os
     
@@ -66,30 +66,30 @@ def phase2():
         print job_id,job
         path = config.basepath+config.datapath+job+"/"
         try:
-          f  =open(path+config.title_file,'r')
+            f  =open(path+config.title_file,'r')
         except:
-          continue
+            continue
         f.close()
         t = crawler_content(path+config.title_file,path+config.content_file)
         t.run()
         if t.getIsOver():
-           f=open(t.outdir,'r')
-           t.realRecord= len(f.readlines())
-           f.close()
-           f= open(config.basepath+config.logFile2,"a");
-           f.write(str(job_id)+"\t"+job+"\t"+str(len(t.urlBase))+"\t"+str(t.realRecord)+"\n")
-           f.close()
+            f=open(t.outdir,'r')
+            t.realRecord= len(f.readlines())
+            f.close()
+            f= open(config.basepath+config.logFile2,"a");
+            f.write(str(job_id)+"\t"+job+"\t"+str(len(t.urlBase))+"\t"+str(t.realRecord)+"\n")
+            f.close()
          
        
 if __name__=="__main__":
-   import argparse
-   parser = argparse.ArgumentParser()
-   parser.add_argument("p",choices=['title','content'],help='select title or content')
-   args = parser.parse_args()
-   if args.p =='title':
-      phase1();
-   if args.p =='content':
-      phase2();
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("p",choices=['title','content'],help='select title or content')
+    args = parser.parse_args()
+    if args.p =='title':
+        phase1();
+    if args.p =='content':
+        phase2();
 
    
     

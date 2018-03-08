@@ -21,25 +21,26 @@ def filter(txt):
     return txt
 class crawler_content(crawler_page):
 
-	def __init__(self,indir,outdir):
+    def __init__(self,indir,outdir):
          crawler_page.__init__(self,outdir);
          self.indir = indir;
          self.urlBase=[];
          
 
-	def urlGenerate(self):
+    def urlGenerate(self):
          t = []
          f = open(self.indir,"r")
          content = f.readlines()
          
          for i in range(len(content)):
+             print(content[i])
              c = content[i].split('\t')
              url = c[1]
              t.append(url)
          self.urlBase=t;
         
  
-	def getData(self,text):
+    def getData(self,text):
           # the url is key 
           # pantient
           p = re.compile('(<div class="f12 graydeep Userinfo clearfix pl29">.*?</div>)',re.S)
@@ -97,23 +98,24 @@ class crawler_content(crawler_page):
           for i in range(len(doctorinfo)):
               d = doctorinfo[i]
               a = answer[i]
-              data["answer"].append({"name":d[0],"mainpage":d[1],"major":d[2],"position":d[3],"answer_time":a[1],"answer_text":filter(a[0])})
+              data["answer"].append({"name":d[0],"mainpage":d[1],"major":d[2],\
+                                   "position":d[3],"answer_time":a[1],"answer_text":filter(a[0])})
           return [data];
          
 
-	def dealWithItem(self,item):
+    def dealWithItem(self,item):
           return demjson.encode(item).encode("utf-8")+"\n"
           
 
 
 
 if __name__ == '__main__':
-     url ='../tmp_data/'	
-     t1=datetime.datetime.now()
-     print t1
-     t=crawler_content(url+"title.txt",url+"content.txt")
-     t.run();
-     print (datetime.datetime.now()-t1).total_seconds()
+    url ='../tmp_data/'	
+    t1=datetime.datetime.now()
+    print(t1)
+    t=crawler_content(url+"title.txt",url+"content.txt")
+    t.run();
+    print (datetime.datetime.now()-t1).total_seconds()
 
 
 '''

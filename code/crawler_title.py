@@ -1,5 +1,5 @@
-import cookielib
-import urllib2 
+from http.cookiejar import CookieJar #import cookielib
+import urllib.request#import urllib2 
 import urllib 
 import re
 from bs4 import BeautifulSoup
@@ -9,7 +9,7 @@ from crawler_lib import *
 
 class crawler_title(crawler_page):
 
-	def __init__(self,outdir,urlStart):
+    def __init__(self,outdir,urlStart):
          crawler_page.__init__(self,outdir);
          self.urlStart = urlStart
          self.MaxPageNum=0;
@@ -17,7 +17,7 @@ class crawler_title(crawler_page):
          self.realRecord = 0;
          self.recordNum = 0;
          
-	def urlGenerate(self):
+    def urlGenerate(self):
          page = self._crawler_page__getpage_(self.urlStart+"1.html")
          page =page.decode('gb2312','ignore')
          soup  = BeautifulSoup(page)
@@ -32,7 +32,7 @@ class crawler_title(crawler_page):
              t.append(self.urlStart+'%s.html'%i);
          self.urlBase=t;
         
-	def getData(self,text):
+    def getData(self,text):
           soup = BeautifulSoup(text,"html.parser")
           dataDiv = soup.find_all("div",class_='club_dic');
           data = []
@@ -49,11 +49,11 @@ class crawler_title(crawler_page):
           return data;
          
 
-	def dealWithItem(self,item):
+    def dealWithItem(self,item):
           d= item[2];
           d = d.replace("\t","")
           item[2] = d.replace("\n","")
-          return '\t'.join(item).encode("utf-8")+'\n';
+          return '\t'.join(item)+'\n';
 
 
 

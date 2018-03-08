@@ -31,67 +31,66 @@ def continueNum():
     
 def phase1():
     
-   # main
-   jobDays = dayGenerate(config.startDate,config.endDate)
+    # main
+    jobDays = dayGenerate(config.startDate,config.endDate)
   
-   jobDays.sort()
-   print jobDays
-   startNum = continueNum()
+    jobDays.sort()
+    print(jobDays)
+    startNum = continueNum()
    
-   for job_id in range(startNum,len(jobDays)):
+    for job_id in range(startNum,len(jobDays)):
     
-     job = jobDays[job_id]
-     print job
-     clean(job);
-     path  = config.basepath+config.datapath+job+"/"
+        job = jobDays[job_id]
+        print(job)
+        clean(job);
+        path  = config.basepath+config.datapath+'/'+job+"/"
     
-     t=crawler_title(path+config.title_file,config.urlStart+job+"/")
-     t.run()
-     #   c = crawler_content(path+config.title_file,path+config.content_file)
-     #  c.run()
-     if t.getIsOver():
-        f=open(t.outdir,'r')
-        t.realRecord= len(f.readlines())
-        f.close()
-        f= open(config.basepath+config.logFile,"a");
-        f.write(str(job_id)+"\t"+job+"\t"+str(t.MaxPageNum)+"\t"+str(t.recordNum)+"\t"+str(t.realRecord)+"\n")
-        f.close()
+        t=crawler_title(path+config.title_file,config.urlStart+job+"/")
+        t.run()
+        #   c = crawler_content(path+config.title_file,path+config.content_file)
+        #  c.run()
+        if t.getIsOver():
+            f=open(t.outdir,'r')
+            t.realRecord= len(f.readlines())
+            f.close()
+            f= open(config.basepath+config.logFile,"a");
+            f.write(str(job_id)+"\t"+job+"\t"+str(t.MaxPageNum)+"\t"+str(t.recordNum)+"\t"+str(t.realRecord)+"\n")
+            f.close()
 def phase2():
     import os
-    
     jobList = os.listdir(config.basepath+config.datapath);
     jobList.sort()
-    print jobList
+    print (jobList)
     #return 0
     for job in jobList:
         job_id = jobList.index(job)
-        print job_id,job
-        path = config.basepath+config.datapath+job+"/"
-        try:
-          f  =open(path+config.title_file,'r')
-        except:
-          continue
+        print (job_id,job)
+        path = config.basepath+config.datapath+'/'+job+"/"
+        
+        f =open(path+config.title_file,'r')
         f.close()
         t = crawler_content(path+config.title_file,path+config.content_file)
         t.run()
         if t.getIsOver():
-           f=open(t.outdir,'r')
-           t.realRecord= len(f.readlines())
-           f.close()
-           f= open(config.basepath+config.logFile2,"a");
-           f.write(str(job_id)+"\t"+job+"\t"+str(len(t.urlBase))+"\t"+str(t.realRecord)+"\n")
-           f.close()
+            f=open(t.outdir,'r')
+            t.realRecord= len(f.readlines())
+            f.close()
+            f= open(config.basepath+config.logFile2,"a");
+            f.write(str(job_id)+"\t"+job+"\t"+str(len(t.urlBase))+"\t"+str(t.realRecord)+"\n")
+            f.close()
          
        
 if __name__=="__main__":
-   import argparse
-   parser = argparse.ArgumentParser()
-   parser.add_argument("p",choices=['title','content'],help='select title or content')
-   args = parser.parse_args()
-   if args.p =='title':
-      phase1();
-   if args.p =='content':
-      phase2();
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-p",choices=['title','content'], help='select title or content')
+    args = parser.parse_args()
+    if args.p =='title':
+        print('crawler titles..')
+        phase1();
+    if args.p =='content':
+        print('crawler contents..')
+        phase2();
 
    
     

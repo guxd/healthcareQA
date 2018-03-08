@@ -1,11 +1,11 @@
 # configure file for crawler
-basepath = '/home/healthcare/healthcare/'
-datapath = 'data/'
+basepath = '/Users/xiaodong/workspace/healthcareQA/'
+datapath = 'data'
 title_file = 'title.txt'
 content_file = 'content.txt'
 
 startDate = [2016,4,1]
-endDate  = [2016,4,30]
+endDate  = [2017,4,30]
 
 
 logFile = "logFile.txt"
